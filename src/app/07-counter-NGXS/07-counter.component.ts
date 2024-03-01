@@ -1,9 +1,7 @@
 import {Component} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {Observable} from 'rxjs';
-// hardcoded , not IDE intellisensed
-import * as a from './state/ngxs-counter.actions'; // a for Actions
-import {CounterSelectors} from './state/ngxs-counter.selectors';
+import {CounterState, DecremenAction, IncremenAction} from './state/ngxs-counter.state';
 
 @Component({
   selector: 'ngxs-counter',
@@ -17,19 +15,15 @@ import {CounterSelectors} from './state/ngxs-counter.selectors';
 })
 export class CounterNgxsComponent {
 
-  // CQRS : command Query segregation responsibility
-  // counter = 0;
-  @Select(CounterSelectors.counter) counter$!: Observable<number>;
+  @Select(CounterState.counter) counter$!: Observable<number>;
 
   constructor(private store: Store) {}
 
   increment() {
-    // this.counter += 1;
-    this.store.dispatch(new a.IncremenAction());
+    this.store.dispatch(new IncremenAction());
   }
 
   decrement() {
-    // this.counter -= 1;
-    this.store.dispatch(new a.DecremenAction());
+    this.store.dispatch(new DecremenAction());
   }
 }

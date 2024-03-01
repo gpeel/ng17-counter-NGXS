@@ -1,31 +1,40 @@
 import {Injectable} from '@angular/core';
-import {Action, State, StateContext} from '@ngxs/store';
+import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {patch} from '@ngxs/store/operators';
-// hardcoded , not IDE intellisensed
-import * as a from './ngxs-counter.actions'; // a for Actions
-import {CounterStateModel, INITIAL_COUNTERFM_STATE_MODEL} from './ngxs-counter.state-model';
+
+export class IncremenAction {
+  static readonly type = '[Counter] increment';
+}
+
+export class DecremenAction {
+  static readonly type = '[Counter] decrement';
+}
+
+export interface CounterStateModel {
+  counter: number;
+  name: string | undefined;
+}
 
 @State<CounterStateModel>({
   name: 'counterFm',
-  defaults: INITIAL_COUNTERFM_STATE_MODEL
+  defaults: {counter: 0, name: undefined}
 })
 @Injectable()
 export class CounterState {
 
-  @Action(a.SetAction)
-  setCounterValue(ctx: StateContext<CounterStateModel>, action: a.SetAction) {
-    console.log('ACTION!!!! SET', action);
-    ctx.setState({...ctx.getState(), counter: action.counterValue});
+  @Selector([CounterState])
+  static counter(counterStateModel: CounterStateModel) {
+    return counterStateModel.counter;
   }
 
-  @Action(a.IncremenAction)
-  increment(ctx: StateContext<CounterStateModel>, action: a.IncremenAction) {
+  @Action(IncremenAction)
+  increment(ctx: StateContext<CounterStateModel>, action: IncremenAction) {
     console.log('ACTION!!!! INCREMENT', action);
     ctx.setState(patch({counter: ctx.getState().counter + 1}));
   }
 
-  @Action(a.DecremenAction)
-  decrement(ctx: StateContext<CounterStateModel>, action: a.DecremenAction) {
+  @Action(DecremenAction)
+  decrement(ctx: StateContext<CounterStateModel>, action: DecremenAction) {
     console.log('ACTION!!!! DECREMENT', action);
     ctx.setState(patch({counter: ctx.getState().counter - 1}));
   }
