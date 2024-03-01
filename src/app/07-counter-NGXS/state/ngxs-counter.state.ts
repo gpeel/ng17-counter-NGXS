@@ -6,10 +6,6 @@ export class IncremenAction {
   static readonly type = '[Counter] increment';
 }
 
-export class DecremenAction {
-  static readonly type = '[Counter] decrement';
-}
-
 export interface CounterStateModel {
   counter: number;
   name: string | undefined;
@@ -33,10 +29,6 @@ export class CounterState {
     ctx.setState(patch({counter: ctx.getState().counter + 1}));
   }
 
-  @Action(DecremenAction)
-  decrement(ctx: StateContext<CounterStateModel>, action: DecremenAction) {
-    console.log('ACTION!!!! DECREMENT', action);
-    ctx.setState(patch({counter: ctx.getState().counter - 1}));
-  }
-
 }
+
+
